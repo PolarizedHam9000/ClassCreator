@@ -1,2 +1,95 @@
 /* main.css | Used for most css.
 */
+
+@font-face{
+  font-family:Minecraft;
+  src: url(http://www.dafont.com/minecrafter.font);
+}
+.hotbararea{
+  display:inline-block;
+  height:32px;
+  width:32px;
+  position:relative;
+  margin-left:1px;
+  left:15px;
+  top:165px;
+  z-index:3;
+}
+#itemarea{
+  display:inline-block;
+  width:1000px;
+  position:absolute;
+  background-color:#00CC99;
+  border: 2px solid black;
+  z-index:0;
+  top:8px;
+  left:374px;
+}
+.items{
+  display:inline-block;
+  position:relative;
+  height:32px;
+  width:32px;
+  z-index:1;
+  margin-right:0px;
+}
+#hotbar{
+  position:absolute;
+  z-index:-2;
+  left:6px;
+  height:330px;
+  width:364px;
+}
+.items:hover{
+  opacity:0.6;
+}
+.numbers{
+  display:inline;
+  z-index:5;
+  position:absolute;
+  width:20px;
+  height:20px;
+  top:9px;
+  left:16px;
+  color:white;
+  font-family:Minecraft;
+  font-weight:bold;
+  font-size:12px;
+}
+.description{
+  position:relative;
+  left:3px;
+  font-size:12px;
+  font-family:Minecraft;
+  font-weight:bold;
+}
+.infoarea{
+  position:relative;
+  display:inline-block;
+  top:400px;
+  background-color:lightblue;
+  border: 2px solid black;
+  height:100px;
+  width:300px;
+  left:366px;
+}
+.info{
+  border: 2px solid black;
+  font-family: Minecraft;
+}
+.armorslot > img{
+  background-color:#8B8B8B;
+}
+.tooltip {
+  display: inline;
+  position: absolute;
+  background-color: black;
+  border: 3px solid purple;
+  border-radius: 5px;
+  color: white;
+  font-family: Minecraft;
+  font-weight: bold;
+  padding: 5px;
+  z-index: 5;
+  margin-left:-10px;
+}

@@ -1,4 +1,4 @@
 ClassCreator
 ============
 
-Your face.
+Created by PolarizedHam9000 for Minecraft.

@@ -183,6 +183,8 @@ function drop(ev){
   else if (ev.target.id == "body"){
     deleteprevious();
   }
+  setTimeout(function testing(){if (window.movingItem.nextSibling && window.movingItem.nextSibling.className == "tooltip"){window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);}},100);
+  //}
 }
 function newamount(ev){
   if (ev.target.value <= 64 && ev.target.value >= 1){

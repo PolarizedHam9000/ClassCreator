@@ -112,8 +112,8 @@ function drag(ev){
   window.movingItemAmount = window.movingItem.parentNode.childNodes[0];
   window.hasbeendonealready = "false";
   window.movingItemclone = window.movingItem;
-  if (window.movingItem.nextSibling && window.movingItem.nextSibling.tagName == "P"){
-    window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);
+  if (ev.target.nextSibling && ev.target.nextSibling.tagName == "P"){
+    ev.target.parentNode.removeChild(ev.target.nextSibling);
   }
 }
 function drop(ev){

@@ -136,11 +136,12 @@ function drop(ev){
       amount = window.movingItemAmount.innerHTML;
       window.movingItemAmount.innerHTML = "";
     }
-    if (window.movingItemclone.parentNode.className == "hotbararea armorslot"){
+    if (window.movingItemclone.parentNode.className == "hotbararea armorslot" && window.hasbeendonealready == "false"){
       document.getElementById(window.movingItem.id).style.opacity = "0.0";
     }
     else if (ev.target.className == "hotbararea armorslot"){
       document.getElementById(window.movingItemclone.id).style.opacity = "1.0";
+	  window.hasbeendonealready = "true";
     }
     ev.target.appendChild(window.movingItem);
     if (amount){

@@ -91,13 +91,16 @@ function allowDrop(ev){
   var target = ev.target;
   var item = window.movingItem;
   var nickname = window.renamed;
-  if (target.getAttribute("data-stackable") != "false" && target.parentNode.childNodes[0].innerHTML != "64" && target.parentNode.id != "itemarea" && target.isEqualNode(item) && !(target.isSameNode(item))){
+  if (target.getAttribute("data-stackable") != "false" && target.parentNode.childNodes[0].innerHTML != "64" && target.parentNode.id != "itemarea" && !(target.isSameNode(item))){
     if (target.parentNode.className == "hotbararea" && item.parentNode.id == "itemarea" && nickname && target.getAttribute("data-name") != nickname){
       return;
     }
-    else {
-      ev.preventDefault();
+    else if (target.parentNode.className == "hotbararea" && item.parentNode.className == "hotbararea" && !(target.isEqualNode(item))){
+      return;
     }
+	else if (target.parentNode.className == "hotbararea" && (target.getAttribute("data-name") == nickname || target.isEqualNode(item))){
+		ev.preventDefault();
+	}
   }
   if (target.tagName == "DIV" && target.childNodes.length < 2){
     if (target.className == "hotbararea armorslot" && item.getAttribute("data-armor-type") == target.id){
@@ -286,7 +289,7 @@ function saveInv(ev){
 function loadInv(ev){
 	clearInv();
 	var slotlist = document.getElementsByClassName("hotbararea");
-	var attrlist = ["src","id","data-name","data-armor-slot","data-stackable","class","ondragstart","ondrop","onmouseenter","onmouseleave","ondragover"];
+	var attrlist = ["src","id","data-name","data-armor-type","data-stackable","class","ondragstart","ondrop","onmouseenter","onmouseleave","ondragover"];
 	for (i=0;i < slotlist.length;i++){
 		var testStorage = slotlist[i].id + "amount";
 		if (localStorage[testStorage]){
@@ -301,6 +304,9 @@ function loadInv(ev){
 			slotlist[i].firstChild.innerHTML = localStorage.getItem(slotlist[i].id + "amount");
 			if (slotlist[i].firstChild.innerHTML == "1"){
 				slotlist[i].firstChild.style.opacity = "0.0";
+			}
+			if (slotlist[i].childNodes[1] && slotlist[i].className == "hotbararea armorslot"){
+				document.getElementById(slotlist[i].childNodes[1].id).style.opacity = "1.0";
 			}
 		}
 	}

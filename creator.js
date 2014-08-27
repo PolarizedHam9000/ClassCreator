@@ -49,6 +49,7 @@ function iteminfo(){
     newhelmet.setAttribute("id",helmets[i]);
     newhelmet.setAttribute("draggable","false");
     newhelmet.setAttribute("src",armorimages[i]);
+	newhelmet.setAttribute("class","armor");
     var node = document.getElementById("test")
     node.insertBefore(newhelmet,node.childNodes[4]);
   }
@@ -59,6 +60,7 @@ function iteminfo(){
     newchestplate.setAttribute("id",chestplates[i]);
     newchestplate.setAttribute("draggable","false");
     newchestplate.setAttribute("src",armorimages[i+5]);
+	newchestplate.setAttribute("class","armor");
     var node = document.getElementById("test")
     node.insertBefore(newchestplate ,node.childNodes[4]);
   }
@@ -69,6 +71,7 @@ function iteminfo(){
     newleggings.setAttribute("id",leggings[i]);
     newleggings.setAttribute("draggable","false");
     newleggings.setAttribute("src",armorimages[i+10]);
+	newleggings.setAttribute("class","armor");
     var node = document.getElementById("test")
     node.insertBefore(newleggings,node.childNodes[4]);
   }
@@ -79,6 +82,7 @@ function iteminfo(){
     newboots.setAttribute("id",boots[i]);
     newboots.setAttribute("draggable","false");
     newboots.setAttribute("src",armorimages[i+15]);
+	newboots.setAttribute("class","armor");
     var node = document.getElementById("test")
     node.insertBefore(newboots,node.childNodes[4]);
   }
@@ -184,7 +188,6 @@ function drop(ev){
     deleteprevious();
   }
   setTimeout(function testing(){if (window.movingItem.nextSibling && window.movingItem.nextSibling.className == "tooltip"){window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);}},100);
-  //}
 }
 function newamount(ev){
   if (ev.target.value <= 64 && ev.target.value >= 1){
@@ -235,7 +238,6 @@ function renameItem(ev){
 function deleteprevious(ev){
   if (window.movingItemclone.parentNode.className == "hotbararea armorslot"){
     document.getElementById(window.movingItemclone.id).style.opacity = "0.0";
-    //window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);
   }
   window.movingItemAmount.innerHTML = "";
   window.movingItem.style.opacity = "0.0";
@@ -252,15 +254,57 @@ function createDescription(ev){
   ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
 }
 function removeDescription(ev){
-  if (ev.target.nextSibling.tagName == "P"){
+  if (ev.target.nextSibling && ev.target.nextSibling.tagName == "P"){
     ev.target.parentNode.removeChild(ev.target.nextSibling);
   }
 }
-
-
-
-
-
+function clearInv(ev){
+	var slotlist = document.getElementsByClassName("hotbararea");
+	var armorlist = document.getElementsByClassName("armor");
+	for (i=0;i < slotlist.length;i++){
+		if (slotlist[i].childNodes[1]){
+			slotlist[i].removeChild(slotlist[i].childNodes[1]);
+			slotlist[i].firstChild.innerHTML = "";
+		}
+	}
+	for (i=0;i < armorlist.length;i++){
+		armorlist[i].style.opacity = "0.0";
+	}
+}
+function saveInv(ev){
+	localStorage.clear();
+	var slotlist = document.getElementsByClassName("hotbararea");
+	for (i=0;i < slotlist.length;i++){
+		if (slotlist[i].childNodes[1]){
+			for (h=0;h < slotlist[i].childNodes[1].attributes.length;h++){
+				localStorage.setItem(slotlist[i].id+slotlist[i].childNodes[1].attributes[h].name,slotlist[i].childNodes[1].attributes[h].value);
+			}
+			localStorage.setItem(slotlist[i].id+"amount",slotlist[i].firstChild.innerHTML);
+		}
+	}
+}
+function loadInv(ev){
+	clearInv();
+	var slotlist = document.getElementsByClassName("hotbararea");
+	var attrlist = ["src","id","data-name","data-armor-slot","data-stackable","class","ondragstart","ondrop","onmouseenter","onmouseleave","ondragover"];
+	for (i=0;i < slotlist.length;i++){
+		var testStorage = slotlist[i].id + "amount";
+		if (localStorage[testStorage]){
+			var loadingitem = document.createElement("img");
+			for (h=0;h < attrlist.length;h++){
+				var testStorage2 = slotlist[i].id + attrlist[h];
+				if (localStorage[testStorage2]){
+					loadingitem.setAttribute(attrlist[h],localStorage.getItem(slotlist[i].id + attrlist[h]));
+				}
+			}
+			slotlist[i].appendChild(loadingitem);
+			slotlist[i].firstChild.innerHTML = localStorage.getItem(slotlist[i].id + "amount");
+			if (slotlist[i].firstChild.innerHTML == "1"){
+				slotlist[i].firstChild.style.opacity = "0.0";
+			}
+		}
+	}
+}
 
 
 

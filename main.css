@@ -10,7 +10,7 @@
   height:32px;
   width:32px;
   position:relative;
-  margin-left:1px;
+  margin-left:0.25px;
   left:15px;
   top:165px;
   z-index:3;
@@ -76,6 +76,7 @@
 .info{
   border: 2px solid black;
   font-family: Minecraft;
+  resize: none;
 }
 .armorslot > img{
   background-color:#8B8B8B;

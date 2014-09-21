@@ -13,7 +13,7 @@
   margin-left:0.25px;
   left:15px;
   top:165px;
-  z-index:3;
+  z-index:0;
 }
 #itemarea{
   display:inline-block;
@@ -45,7 +45,7 @@
 }
 .numbers{
   display:inline;
-  z-index:5;
+  z-index:3;
   position:absolute;
   width:20px;
   height:20px;
@@ -91,6 +91,6 @@
   font-family: Minecraft;
   font-weight: bold;
   padding: 5px;
-  z-index: 5;
+  z-index: 4;
   margin-left:-10px;
 }

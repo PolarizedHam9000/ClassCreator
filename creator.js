@@ -92,16 +92,31 @@ function allowDrop(ev){
   var item = window.movingItem;
   var nickname = window.renamed;
   var lore = window.itemlore;
+  var testItem = document.createElement("img")
+  for (i=0;i<window.movingItem.attributes.length;i++){
+	testItem.setAttribute(window.movingItem.attributes[i].name,window.movingItem.attributes[i].value)
+  }
+  if (nickname){
+	testItem.setAttribute("data-name",nickname);
+  }
+	testItem.setAttribute("data-namebold",window.namebold);
+	testItem.setAttribute("data-nameitalics",window.nameitalics);
+	testItem.setAttribute("data-nameunderline",window.nameunderline);
+	testItem.setAttribute("data-namecolor",window.namecolor);
+  if (lore){
+	testItem.setAttribute("data-lore",lore);
+	testItem.setAttribute("data-lorebold",window.lorebold);
+	testItem.setAttribute("data-loreitalics",window.loreitalics);
+	testItem.setAttribute("data-loreunderline",window.loreunderline);
+	testItem.setAttribute("data-lorecolor",window.lorecolor);
+  }
   if (target.getAttribute("data-stackable") != "false" && target.parentNode.childNodes[0].innerHTML != "64" && target.parentNode.id != "itemarea" && !(target.isSameNode(item))){
-    if (target.parentNode.className == "hotbararea" && item.parentNode.id == "itemarea" && nickname && lore && (target.getAttribute("data-name") != nickname || target.getAttribute("data-lore") != lore)){
-      return;
+    if (item.parentNode.id == "itemarea" && ev.target.isEqualNode(testItem)){
+	  ev.preventDefault();
     }
-    else if (target.parentNode.className == "hotbararea" && item.parentNode.className == "hotbararea" && !(target.isEqualNode(item))){
-      return;
+    else if (item.parentNode.className == "hotbararea" && ev.target.isEqualNode(window.movingItem)){
+      ev.preventDefault();
     }
-	else if (target.parentNode.className == "hotbararea" && ((target.getAttribute("data-name") == nickname && target.getAttribute("data-lore") == lore) || target.isEqualNode(item))){
-		ev.preventDefault();
-	}
   }
   if (target.tagName == "DIV" && target.childNodes.length < 2){
     if (target.className == "hotbararea armorslot" && item.getAttribute("data-armor-type") == target.id){
@@ -131,16 +146,24 @@ function drop(ev){
       window.movingItem = window.movingItem.cloneNode(false);
       if (window.renamed){
         window.movingItem.setAttribute("data-name",window.renamed);
-      }
-      else if (!(window.renamed)){
+	  }
+		window.movingItem.setAttribute("data-namebold",window.namebold);
+		window.movingItem.setAttribute("data-nameitalics",window.nameitalics);
+		window.movingItem.setAttribute("data-nameunderline",window.nameunderline);
+		window.movingItem.setAttribute("data-namecolor",window.namecolor);
+      /*else if (!(window.renamed)){
         window.movingItem.setAttribute("data-name",window.movingItem.id);
-      }
+      }*/
 		if (window.itemlore){
 			window.movingItem.setAttribute("data-lore",window.itemlore);
+			window.movingItem.setAttribute("data-lorebold",window.lorebold);
+			window.movingItem.setAttribute("data-loreitalics",window.loreitalics);
+			window.movingItem.setAttribute("data-loreunderline",window.loreunderline);
+			window.movingItem.setAttribute("data-lorecolor",window.lorecolor);
 		}
-		else if (!(window.itemlore)){
+		/*else if (!(window.itemlore)){
 			window.movingItem.setAttribute("data-lore","");
-		}
+		}*/
       var amount = window.amounttoadd;
       if (window.movingItem.getAttribute("data-stackable") == "false"){
         amount = 1;
@@ -197,7 +220,7 @@ function drop(ev){
   else if (ev.target.id == "body"){
     deleteprevious();
   }
-  setTimeout(function testing(){if (window.movingItem.nextSibling && window.movingItem.nextSibling.className == "tooltip"){window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);}},100);
+  setTimeout(function testing(){if (window.movingItem.nextSibling && window.movingItem.nextSibling.className == "tooltip"){window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);}},500);
 }
 function newamount(ev){
   if (ev.target.value <= 64 && ev.target.value >= 1){
@@ -263,23 +286,46 @@ function deleteprevious(ev){
   window.movingItem.parentNode.removeChild(window.movingItem.parentNode.childNodes[1]);         
 }
 function createDescription(ev){
-  var newParagraph = document.createElement("p");
-  var namespan = document.createElement("span");
-  var contentname = document.createTextNode(ev.target.getAttribute("data-name"));
-  namespan.appendChild(contentname);
-  newParagraph.appendChild(namespan);
-  if (ev.target.getAttribute("data-lore")){
-	var contentlore = document.createTextNode("\n" + ev.target.getAttribute("data-lore"));
-	var lorespan = document.createElement("span");
-	lorespan.setAttribute("style","color: blue");
-	lorespan.appendChild(contentlore);
-	newParagraph.appendChild(lorespan);
-  }
-  newParagraph.setAttribute("class","tooltip");
-  newParagraph.setAttribute("style","width:" + ev.target.getAttribute("data-name").length * 12 + "px");
-  newParagraph.setAttribute("ondrop","drop(event)");
-  newParagraph.setAttribute("ondragover","allowDrop(event)");
-  ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
+	var newParagraph = document.createElement("p");
+	if (ev.target.getAttribute("data-name")){
+		var contentname = document.createTextNode(ev.target.getAttribute("data-name"));
+		var namespan = document.createElement("span");
+		namespan.setAttribute("style","");
+		if (ev.target.getAttribute("data-namebold") == "true"){
+			namespan.setAttribute("style",namespan.getAttribute("style") + "font-weight:bold;");
+		}
+		if (ev.target.getAttribute("data-nameitalics") == "true"){
+			namespan.setAttribute("style",namespan.getAttribute("style") + "font-style:italic;");
+		}
+		if (ev.target.getAttribute("data-nameunderline") == "true"){
+			namespan.setAttribute("style",namespan.getAttribute("style") + "text-decoration: underline;");
+		}
+		namespan.setAttribute("style",namespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-namecolor") + ";");		
+		namespan.appendChild(contentname);
+		newParagraph.appendChild(namespan);
+	}
+	if (ev.target.getAttribute("data-lore")){
+		var contentlore = document.createTextNode("\n" + ev.target.getAttribute("data-lore"));
+		var lorespan = document.createElement("span");
+		lorespan.setAttribute("style","");
+		if (ev.target.getAttribute("data-lorebold") == "true"){
+			lorespan.setAttribute("style",lorespan.getAttribute("style") + "font-weight:bold;");
+		}
+		if (ev.target.getAttribute("data-loreitalics") == "true"){
+			lorespan.setAttribute("style",lorespan.getAttribute("style") + "font-style:italic;");
+		}
+		if (ev.target.getAttribute("data-loreunderline") == "true"){
+			lorespan.setAttribute("style",lorespan.getAttribute("style") + "text-decoration: underline;");
+		}
+		lorespan.setAttribute("style",lorespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-lorecolor") + ";");
+		lorespan.appendChild(contentlore);
+		newParagraph.appendChild(lorespan);
+	}
+	newParagraph.setAttribute("class","tooltip");
+	newParagraph.setAttribute("style","width:" + ev.target.getAttribute("data-name").length * 12 + "px");
+	newParagraph.setAttribute("ondrop","drop(event)");
+	newParagraph.setAttribute("ondragover","allowDrop(event)");
+	ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
 }
 function removeDescription(ev){
   if (ev.target.nextSibling && ev.target.nextSibling.tagName == "P"){
@@ -336,9 +382,99 @@ function loadInv(ev){
 		}
 	}
 }
-
-
-
-
+function format(ev){
+	var previousstyle = ev.target.style.left;
+	if (ev.target.style.backgroundColor == "gray"){
+		ev.target.setAttribute("style","left:" + previousstyle + ";");
+		if (ev.target.title == "Bold"){
+			if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+				window.lorebold = "false";
+			}
+			else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+				window.namebold = "false"
+			}
+		}
+		if (ev.target.title == "Italics"){
+			if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+				window.loreitalics = "false";
+			}
+			else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+				window.nameitalics = "false";
+			}
+		}
+		if (ev.target.title == "Underline"){
+			if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+				window.loreunderline = "false";
+			}
+			else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+				window.nameunderline = "false";
+			}
+		}
+		if (ev.target.title == "Text Color"){
+			if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+				window.lorecolor = "#FFFFFF";
+			}
+			else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+				window.namecolor = "#FFFFFF";
+			}
+		}
+	}
+	else {
+		var previousstyle = ev.target.getAttribute("style");
+		ev.target.setAttribute("style",previousstyle + "background-color:gray;");
+		if (ev.target.title == "Bold"){
+			if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+				window.lorebold = "true";
+			}
+			else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+				window.namebold = "true";
+			}
+		}
+		if (ev.target.title == "Italics"){
+			if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+				window.loreitalics = "true";
+			}
+			else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+				window.nameitalics = "true";
+			}
+		}
+		if (ev.target.title == "Underline"){
+			if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+				window.loreunderline = "true";
+			}
+			else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+				window.nameunderline = "true";
+			}
+		}
+		if (ev.target.title == "Text Color"){
+			if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+				window.lorecolor = "#" + ev.target.title;
+			}
+			else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+				window.namecolor = "#" + ev.target.title;
+			}			
+		}
+	}
+}
+function changetext(ev){
+	if (ev.target.value == "Hexa Color"){
+		ev.target.removeAttribute("value");
+	}
+	else if (ev.target.value == ""){
+		ev.target.setAttribute("value","Hexa Color");
+		ev.target.style.color = "lightgray";
+	}
+}
+function colortext(ev){
+	if (ev.target.value.length == "6"){
+		ev.target.style.color = "#" + ev.target.value;
+		if (ev.target.parentNode.childNodes[0].innerHTML == "Lore:"){
+			window.lorecolor = "#" + ev.target.value;
+		}
+		else if (ev.target.parentNode.childNodes[0].innerHTML == "Name:"){
+			window.namecolor = "#" + ev.target.value;
+		}	
+	}
+}
 
 // I could really go for some tasty ham right now...

@@ -137,7 +137,10 @@ function drop(ev){
       }
 		if (window.itemlore){
 			window.movingItem.setAttribute("data-lore",window.itemlore);
-		}	
+		}
+		else if (!(window.itemlore)){
+			window.movingItem.setAttribute("data-lore","");
+		}
       var amount = window.amounttoadd;
       if (window.movingItem.getAttribute("data-stackable") == "false"){
         amount = 1;

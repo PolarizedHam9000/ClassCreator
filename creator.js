@@ -318,6 +318,7 @@ function createDescription(ev){
 			lorespan.setAttribute("style",lorespan.getAttribute("style") + "text-decoration: underline;");
 		}
 		lorespan.setAttribute("style",lorespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-lorecolor") + ";");
+		lorespan.setAttribute("style",lorespan.getAttribute("style") + "display:block;position:relative;top:5px;padding-bottom:10px;");
 		lorespan.appendChild(contentlore);
 		newParagraph.appendChild(lorespan);
 	}

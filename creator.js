@@ -323,7 +323,16 @@ function createDescription(ev){
 		newParagraph.appendChild(lorespan);
 	}
 	newParagraph.setAttribute("class","tooltip");
-	newParagraph.setAttribute("style","width:" + ev.target.getAttribute("data-name").length * 12 + "px");
+	var boxlength = ev.target.getAttribute("data-name").length;
+	if (ev.target.getAttribute("data-lore")){
+		var words = ev.target.getAttribute("data-lore").toString().split(" ");
+		for (i=0;i < words.length;i++){
+			if (words[i].length > boxlength){
+				boxlength = words[i].length;
+			}
+		}	
+	}
+	newParagraph.setAttribute("style","width:" + boxlength * 12 + "px");
 	newParagraph.setAttribute("ondrop","drop(event)");
 	newParagraph.setAttribute("ondragover","allowDrop(event)");
 	ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
@@ -361,7 +370,7 @@ function saveInv(ev){
 function loadInv(ev){
 	clearInv();
 	var slotlist = document.getElementsByClassName("hotbararea");
-	var attrlist = ["src","id","data-name","data-armor-type","data-stackable","class","ondragstart","ondrop","onmouseenter","onmouseleave","ondragover"];
+	var attrlist = ["src","id","data-name","data-lore","data-armor-type","data-stackable","class","ondragstart","ondrop","onmouseenter","onmouseleave","ondragover","data-namebold","data-nameitalics","data-nameunderline","data-namecolor","data-lorebold","data-loreitalics","data-loreunderline","data-lorecolor"];
 	for (i=0;i < slotlist.length;i++){
 		var testStorage = slotlist[i].id + "amount";
 		if (localStorage[testStorage]){

@@ -323,16 +323,18 @@ function createDescription(ev){
 		newParagraph.appendChild(lorespan);
 	}
 	newParagraph.setAttribute("class","tooltip");
-	var boxlength = ev.target.getAttribute("data-name").length;
-	if (ev.target.getAttribute("data-lore")){
-		var words = ev.target.getAttribute("data-lore").toString().split(" ");
-		for (i=0;i < words.length;i++){
-			if (words[i].length > boxlength){
-				boxlength = words[i].length;
-			}
-		}	
+	if (ev.target.parentNode.className != "itemarea"){
+		var boxlength = ev.target.getAttribute("data-name").length;
+		if (ev.target.getAttribute("data-lore")){
+			var words = ev.target.getAttribute("data-lore").toString().split(" ");
+			for (i=0;i < words.length;i++){
+				if (words[i].length > boxlength){
+					boxlength = words[i].length;
+				}
+			}	
+		}
+	newParagraph.setAttribute("style","min-width:" + boxlength * 13 + "px");
 	}
-	newParagraph.setAttribute("style","width:" + boxlength * 12 + "px");
 	newParagraph.setAttribute("ondrop","drop(event)");
 	newParagraph.setAttribute("ondragover","allowDrop(event)");
 	ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);

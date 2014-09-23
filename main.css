@@ -90,12 +90,14 @@
   position: absolute;
   background-color: black;
   border: 3px solid purple;
+  border-spacing: -5px;
   border-radius: 5px;
   color: white;
   font-family: Minecraft;
   padding: 5px;
   z-index: 4;
   margin-left:-10px;
+  box-sizing: border-box;
 }
 .formatting{
 	display:inline;

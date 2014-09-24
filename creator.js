@@ -110,6 +110,9 @@ function allowDrop(ev){
 	testItem.setAttribute("data-loreunderline",window.loreunderline);
 	testItem.setAttribute("data-lorecolor",window.lorecolor);
   }
+  if (window.enchantlist != ""){
+	testItem.setAttribute("data-enchants",window.enchantlist);
+  }
   if (target.getAttribute("data-stackable") != "false" && target.parentNode.childNodes[0].innerHTML != "64" && target.parentNode.id != "itemarea" && !(target.isSameNode(item))){
     if (item.parentNode.id == "itemarea" && ev.target.isEqualNode(testItem)){
 	  ev.preventDefault();
@@ -143,17 +146,14 @@ function drop(ev){
   ev.preventDefault();
   if (ev.target.className == "hotbararea" || ev.target.className == "hotbararea armorslot"){
     if (window.movingItem.parentNode.id == "itemarea"){
-      window.movingItem = window.movingItem.cloneNode(false);
-      if (window.renamed){
-        window.movingItem.setAttribute("data-name",window.renamed);
-	  }
+		window.movingItem = window.movingItem.cloneNode(false);
+		if (window.renamed){
+			window.movingItem.setAttribute("data-name",window.renamed);
+		}
 		window.movingItem.setAttribute("data-namebold",window.namebold);
 		window.movingItem.setAttribute("data-nameitalics",window.nameitalics);
 		window.movingItem.setAttribute("data-nameunderline",window.nameunderline);
 		window.movingItem.setAttribute("data-namecolor",window.namecolor);
-      /*else if (!(window.renamed)){
-        window.movingItem.setAttribute("data-name",window.movingItem.id);
-      }*/
 		if (window.itemlore){
 			window.movingItem.setAttribute("data-lore",window.itemlore);
 			window.movingItem.setAttribute("data-lorebold",window.lorebold);
@@ -161,9 +161,7 @@ function drop(ev){
 			window.movingItem.setAttribute("data-loreunderline",window.loreunderline);
 			window.movingItem.setAttribute("data-lorecolor",window.lorecolor);
 		}
-		/*else if (!(window.itemlore)){
-			window.movingItem.setAttribute("data-lore","");
-		}*/
+		window.movingItem.setAttribute("data-enchants",window.enchantlist);
       var amount = window.amounttoadd;
       if (window.movingItem.getAttribute("data-stackable") == "false"){
         amount = 1;
@@ -223,15 +221,24 @@ function drop(ev){
   setTimeout(function testing(){if (window.movingItem.nextSibling && window.movingItem.nextSibling.className == "tooltip"){window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);}},500);
 }
 function newamount(ev){
-  if (ev.target.value <= 64 && ev.target.value >= 1){
-    window.amounttoadd = Math.floor(ev.target.value);
-    ev.target.value = window.amounttoadd;
-  }else if (ev.target.value != ""){
-    alert("Value must be a number between 1 and 64.");
-    ev.target.value = "";
-  }else if (ev.target.value == ""){
-    window.amounttoadd = "1";
-  }
+	if ((isNaN(String.fromCharCode(ev.which)) && ev.which != 8) || ev.shiftKey){
+		ev.preventDefault();
+	}
+	else {
+		if (ev.target.value == ""){
+			window.amounttoadd = "1";
+		}
+		else {
+			if (ev.target.value > 64){
+				ev.target.value = "64";
+			}
+			else if (ev.target.value < 1){
+				ev.target.value = "1";
+			}
+			window.amounttoadd = Math.floor(ev.target.value);
+			ev.target.value = window.amounttoadd.toString();
+		}
+	}
 }
 function amountcheck(num){
   if (num > 64){
@@ -303,6 +310,22 @@ function createDescription(ev){
 		namespan.setAttribute("style",namespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-namecolor") + ";");		
 		namespan.appendChild(contentname);
 		newParagraph.appendChild(namespan);
+		newParagraph.appendChild(document.createElement("br"));
+	}
+	if (ev.target.getAttribute("data-enchants")){
+		var parts = ev.target.getAttribute("data-enchants").split("|");
+		for (i=0;i < parts.length;i++){
+			var newspan = document.createElement("span");
+			var newcontent = document.createTextNode(parts[i]);
+			newspan.appendChild(newcontent);
+			newspan.setAttribute("style","color:lightgray");
+			var fillerspan = document.createElement("span");
+			var fillercontent = document.createTextNode("|");
+			fillerspan.appendChild(fillercontent);
+			fillerspan.setAttribute("style","color:black;");
+			newParagraph.appendChild(newspan);
+			newParagraph.appendChild(fillerspan);
+		}
 	}
 	if (ev.target.getAttribute("data-lore")){
 		var contentlore = document.createTextNode("\n" + ev.target.getAttribute("data-lore"));
@@ -488,5 +511,19 @@ function colortext(ev){
 		}	
 	}
 }
-
+function checknum(ev){
+	if ((isNaN(String.fromCharCode(ev.which)) && ev.which != 8) || ev.shiftKey){
+		ev.preventDefault();
+	}
+	enchantment(ev);
+}
+function enchantment(ev){
+	var enchantments = document.getElementById("enchantments").getElementsByTagName("input");
+	window.enchantlist = "\n";
+	for (i=0;i<enchantments.length;i++){
+		if (enchantments[i].value != "" && enchantments[i].value != 0){
+			window.enchantlist = window.enchantlist + enchantments[i].previousSibling.previousSibling.innerHTML + "|" + enchantments[i].value + "\n";
+		}
+	}
+}
 // I could really go for some tasty ham right now...

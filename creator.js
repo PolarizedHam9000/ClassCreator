@@ -110,7 +110,7 @@ function allowDrop(ev){
 	testItem.setAttribute("data-loreunderline",window.loreunderline);
 	testItem.setAttribute("data-lorecolor",window.lorecolor);
   }
-  if (window.enchantlist != ""){
+  if (window.enchantlist){
 	testItem.setAttribute("data-enchants",window.enchantlist);
   }
   if (target.getAttribute("data-stackable") != "false" && target.parentNode.childNodes[0].innerHTML != "64" && target.parentNode.id != "itemarea" && !(target.isSameNode(item))){
@@ -161,7 +161,7 @@ function drop(ev){
 			window.movingItem.setAttribute("data-loreunderline",window.loreunderline);
 			window.movingItem.setAttribute("data-lorecolor",window.lorecolor);
 		}
-		if (window.enchantlist && window.enchantlist != "\n"){
+		if (window.enchantlist){
 			window.movingItem.setAttribute("data-enchants",window.enchantlist);
 		}
       var amount = window.amounttoadd;
@@ -295,6 +295,9 @@ function deleteprevious(ev){
   window.movingItem.parentNode.removeChild(window.movingItem.parentNode.childNodes[1]);         
 }
 function createDescription(ev){
+	if (ev.target.nextSibling && ev.target.nextSibling.tagName == "P"){
+		ev.target.parentNode.removeChild(ev.target.nextSibling);
+	}
 	var newParagraph = document.createElement("p");
 	if (ev.target.getAttribute("data-name")){
 		var contentname = document.createTextNode(ev.target.getAttribute("data-name"));
@@ -314,7 +317,9 @@ function createDescription(ev){
 		newParagraph.appendChild(namespan);
 	}
 	if (ev.target.getAttribute("data-enchants") || ev.target.getAttribute("data-lore")){
-		newParagraph.appendChild(document.createElement("br"));
+		var textbreak = document.createElement("br");
+		textbreak.setAttribute("style","line-height: 150%;");
+		newParagraph.appendChild(textbreak);
 	}
 	if (ev.target.getAttribute("data-enchants")){
 		var parts = ev.target.getAttribute("data-enchants").split("z");
@@ -367,9 +372,9 @@ function createDescription(ev){
 	ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
 }
 function removeDescription(ev){
-  if (ev.target.nextSibling && ev.target.nextSibling.tagName == "P"){
-    ev.target.parentNode.removeChild(ev.target.nextSibling);
-  }
+	if (ev.target.nextSibling && ev.target.nextSibling.tagName == "P"){
+		ev.target.parentNode.removeChild(ev.target.nextSibling);
+	}
 }
 function clearInv(ev){
 	var slotlist = document.getElementsByClassName("hotbararea");

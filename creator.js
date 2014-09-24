@@ -316,12 +316,10 @@ function createDescription(ev){
 		namespan.appendChild(contentname);
 		newParagraph.appendChild(namespan);
 	}
-	if (ev.target.getAttribute("data-enchants") || ev.target.getAttribute("data-lore")){
+	if (ev.target.getAttribute("data-enchants")){
 		var textbreak = document.createElement("br");
 		textbreak.setAttribute("style","line-height: 150%;");
 		newParagraph.appendChild(textbreak);
-	}
-	if (ev.target.getAttribute("data-enchants")){
 		var parts = ev.target.getAttribute("data-enchants").split("z");
 		for (i=0;i < parts.length;i++){
 			var newspan = document.createElement("span");
@@ -337,6 +335,9 @@ function createDescription(ev){
 		}
 	}
 	if (ev.target.getAttribute("data-lore")){
+		var textbreak = document.createElement("br");
+		textbreak.setAttribute("style","line-height: 150%;");
+		newParagraph.appendChild(textbreak);
 		var contentlore = document.createTextNode("\n" + ev.target.getAttribute("data-lore"));
 		var lorespan = document.createElement("span");
 		lorespan.setAttribute("style","");

@@ -161,7 +161,9 @@ function drop(ev){
 			window.movingItem.setAttribute("data-loreunderline",window.loreunderline);
 			window.movingItem.setAttribute("data-lorecolor",window.lorecolor);
 		}
-		window.movingItem.setAttribute("data-enchants",window.enchantlist);
+		if (window.enchantlist && window.enchantlist != "\n"){
+			window.movingItem.setAttribute("data-enchants",window.enchantlist);
+		}
       var amount = window.amounttoadd;
       if (window.movingItem.getAttribute("data-stackable") == "false"){
         amount = 1;
@@ -310,19 +312,21 @@ function createDescription(ev){
 		namespan.setAttribute("style",namespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-namecolor") + ";");		
 		namespan.appendChild(contentname);
 		newParagraph.appendChild(namespan);
+	}
+	if (ev.target.getAttribute("data-enchants") || ev.target.getAttribute("data-lore")){
 		newParagraph.appendChild(document.createElement("br"));
 	}
 	if (ev.target.getAttribute("data-enchants")){
-		var parts = ev.target.getAttribute("data-enchants").split("|");
+		var parts = ev.target.getAttribute("data-enchants").split("z");
 		for (i=0;i < parts.length;i++){
 			var newspan = document.createElement("span");
 			var newcontent = document.createTextNode(parts[i]);
 			newspan.appendChild(newcontent);
-			newspan.setAttribute("style","color:lightgray");
+			newspan.setAttribute("style","color:#A7A7A5;");
 			var fillerspan = document.createElement("span");
-			var fillercontent = document.createTextNode("|");
+			var fillercontent = document.createTextNode("z");
 			fillerspan.appendChild(fillercontent);
-			fillerspan.setAttribute("style","color:black;");
+			fillerspan.setAttribute("style","color:black;font-size:10px;");
 			newParagraph.appendChild(newspan);
 			newParagraph.appendChild(fillerspan);
 		}
@@ -512,7 +516,7 @@ function colortext(ev){
 	}
 }
 function checknum(ev){
-	if ((isNaN(String.fromCharCode(ev.which)) && ev.which != 8) || ev.shiftKey){
+	if ((isNaN(String.fromCharCode(ev.which)) && ev.which != 8) || ev.shiftKey || (ev.target.value.length == 0 && ev.which == 48)){
 		ev.preventDefault();
 	}
 	enchantment(ev);
@@ -520,10 +524,13 @@ function checknum(ev){
 function enchantment(ev){
 	var enchantments = document.getElementById("enchantments").getElementsByTagName("input");
 	window.enchantlist = "\n";
+	var listlength = enchantments.length;
 	for (i=0;i<enchantments.length;i++){
 		if (enchantments[i].value != "" && enchantments[i].value != 0){
-			window.enchantlist = window.enchantlist + enchantments[i].previousSibling.previousSibling.innerHTML + "|" + enchantments[i].value + "\n";
+			window.enchantlist = window.enchantlist + enchantments[i].previousSibling.previousSibling.innerHTML + "z" + enchantments[i].value + "z\n";
 		}
 	}
+	window.enchantlist = window.enchantlist.substr(0,window.enchantlist.length - 2);
+	window.enchantlist = window.enchantlist.replace(/ /g,"z");
 }
 // I could really go for some tasty ham right now...

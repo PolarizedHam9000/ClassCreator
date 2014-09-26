@@ -69,10 +69,10 @@
 .infoarea{
   position:relative;
   display:inline-block;
-  top:525px;
+  top:555px;
   background-color:lightblue;
   border: 2px solid black;
-  height:100px;
+  height:80px;
   width:300px;
   left:366px;
 }

@@ -113,6 +113,9 @@ function allowDrop(ev){
   if (window.enchantlist){
 	testItem.setAttribute("data-enchants",window.enchantlist);
   }
+  if (window.potioneffectlist && window.movingItem.id.match("POTION")){
+	testItem.setAttribute("data-potioneffects",window.potioneffectslist);
+  }
   if (target.getAttribute("data-stackable") != "false" && target.parentNode.childNodes[0].innerHTML != "64" && target.parentNode.id != "itemarea" && !(target.isSameNode(item))){
     if (item.parentNode.id == "itemarea" && ev.target.isEqualNode(testItem)){
 	  ev.preventDefault();
@@ -163,6 +166,9 @@ function drop(ev){
 		}
 		if (window.enchantlist){
 			window.movingItem.setAttribute("data-enchants",window.enchantlist);
+		}
+		if (window.potioneffectlist && window.movingItem.id.match("POTION")){
+			window.movingItem.setAttribute("data-potioneffects",window.potioneffectlist);
 		}
       var amount = window.amounttoadd;
       if (window.movingItem.getAttribute("data-stackable") == "false"){
@@ -322,6 +328,7 @@ function createDescription(ev){
 		newParagraph.appendChild(textbreak);
 		var parts = ev.target.getAttribute("data-enchants").split("z");
 		for (i=0;i < parts.length;i++){
+			var newbreak = document.createElement("br");
 			var newspan = document.createElement("span");
 			var newcontent = document.createTextNode(parts[i]);
 			newspan.appendChild(newcontent);
@@ -332,6 +339,31 @@ function createDescription(ev){
 			fillerspan.setAttribute("style","color:black;font-size:10px;");
 			newParagraph.appendChild(newspan);
 			newParagraph.appendChild(fillerspan);
+			if (!(isNaN(parts[i])) && parts[i] != "Infinity"){
+				newParagraph.appendChild(newbreak);
+			}
+		}
+	}
+	if (ev.target.getAttribute("data-potioneffects")){
+		var textbreak = document.createElement("br");
+		textbreak.setAttribute("style","line-height: 150%");
+		newParagraph.appendChild(textbreak);
+		var parts = ev.target.getAttribute("data-potioneffects").split("z");
+		for (i=0;i < parts.length;i++){
+			var newbreak = document.createElement("br");
+			var newspan = document.createElement("span");
+			var newcontent = document.createTextNode(parts[i]);
+			newspan.appendChild(newcontent);
+			newspan.setAttribute("style","color: #A7A7A5;");
+			var fillerspan = document.createElement("span");
+			var fillercontent = document.createTextNode("z");
+			fillerspan.appendChild(fillercontent);
+			fillerspan.setAttribute("style","color:black;font-size:10px;");
+			newParagraph.appendChild(newspan);
+			newParagraph.appendChild(fillerspan);
+			if (!(isNaN(parts[i]))){
+				newParagraph.appendChild(newbreak);
+			}
 		}
 	}
 	if (ev.target.getAttribute("data-lore")){
@@ -393,37 +425,43 @@ function clearInv(ev){
 function saveInv(ev){
 	localStorage.clear();
 	var slotlist = document.getElementsByClassName("hotbararea");
+	var classcode = document.getElementById("classcode");
+	var datalist = [];
 	for (i=0;i < slotlist.length;i++){
 		if (slotlist[i].childNodes[1]){
+			var info = {};
+			info["slot"] = slotlist[i].id;
+			info["amount"] = slotlist[i].firstChild.innerHTML;
 			for (h=0;h < slotlist[i].childNodes[1].attributes.length;h++){
-				localStorage.setItem(slotlist[i].id+slotlist[i].childNodes[1].attributes[h].name,slotlist[i].childNodes[1].attributes[h].value);
+				info[slotlist[i].childNodes[1].attributes[h].name] = slotlist[i].childNodes[1].attributes[h].value;
 			}
-			localStorage.setItem(slotlist[i].id+"amount",slotlist[i].firstChild.innerHTML);
+			datalist.push(info);
 		}
 	}
+	var data = JSON.stringify(datalist);
+	classcode.value = data;
 }
 function loadInv(ev){
 	clearInv();
 	var slotlist = document.getElementsByClassName("hotbararea");
-	var attrlist = ["src","id","data-name","data-lore","data-armor-type","data-stackable","class","ondragstart","ondrop","onmouseenter","onmouseleave","ondragover","data-namebold","data-nameitalics","data-nameunderline","data-namecolor","data-lorebold","data-loreitalics","data-loreunderline","data-lorecolor"];
-	for (i=0;i < slotlist.length;i++){
-		var testStorage = slotlist[i].id + "amount";
-		if (localStorage[testStorage]){
-			var loadingitem = document.createElement("img");
-			for (h=0;h < attrlist.length;h++){
-				var testStorage2 = slotlist[i].id + attrlist[h];
-				if (localStorage[testStorage2]){
-					loadingitem.setAttribute(attrlist[h],localStorage.getItem(slotlist[i].id + attrlist[h]));
-				}
-			}
-			slotlist[i].appendChild(loadingitem);
-			slotlist[i].firstChild.innerHTML = localStorage.getItem(slotlist[i].id + "amount");
-			if (slotlist[i].firstChild.innerHTML == "1"){
-				slotlist[i].firstChild.style.opacity = "0.0";
-			}
-			if (slotlist[i].childNodes[1] && slotlist[i].className == "hotbararea armorslot"){
-				document.getElementById(slotlist[i].childNodes[1].id).style.opacity = "1.0";
-			}
+	var attrlist = ["src","id","data-name","data-lore","data-armor-type","data-stackable","class","ondragstart","ondrop","onmouseenter","onmouseleave","ondragover","data-namebold","data-nameitalics","data-nameunderline","data-namecolor","data-lorebold","data-loreitalics","data-loreunderline","data-lorecolor","data-enchants"];
+	var classcode = document.getElementById("classcode");
+	var datalist = JSON.parse(classcode.value);
+	for (a=0;a < datalist.length;a++){
+		var keys = Object.keys(datalist[a])
+		var currentobject = datalist[a];
+		var loadingitem = document.createElement("img");
+		var slottofill = document.getElementById(currentobject[keys[0]]);
+		slottofill.firstChild.innerHTML = currentobject[keys[1]];
+		for (i=2;i < keys.length;i++){
+			loadingitem.setAttribute(keys[i],currentobject[keys[i]]);
+		}
+		slottofill.appendChild(loadingitem);
+		if (slottofill.firstChild.innerHTML == "1"){
+			slottofill.firstChild.style.opacity = "0.0";
+		}
+		if (slottofill.childNodes[1] && slottofill.className == "hotbararea armorslot"){
+			document.getElementById(slottofill.childNodes[1].id).style.opacity = "1.0";
 		}
 	}
 }
@@ -525,12 +563,16 @@ function checknum(ev){
 	if ((isNaN(String.fromCharCode(ev.which)) && ev.which != 8) || ev.shiftKey || (ev.target.value.length == 0 && ev.which == 48)){
 		ev.preventDefault();
 	}
-	enchantment(ev);
+	if (ev.target.parentNode.id == "enchantments"){
+		enchantment(ev);
+	}
+	else if (ev.target.parentNode.id == "potioneffects"){
+		potioneffects(ev);
+	}
 }
 function enchantment(ev){
 	var enchantments = document.getElementById("enchantments").getElementsByTagName("input");
 	window.enchantlist = "\n";
-	var listlength = enchantments.length;
 	for (i=0;i<enchantments.length;i++){
 		if (enchantments[i].value != "" && enchantments[i].value != 0){
 			window.enchantlist = window.enchantlist + enchantments[i].previousSibling.previousSibling.innerHTML + "z" + enchantments[i].value + "z\n";
@@ -539,17 +581,27 @@ function enchantment(ev){
 	window.enchantlist = window.enchantlist.substr(0,window.enchantlist.length - 2);
 	window.enchantlist = window.enchantlist.replace(/ /g,"z");
 }
-function rangevalue(ev){
-	var decnum = Number(ev.target.value);
-	var hexnum = decnum.toString(16);
-	for (i=0;i<6;i++){
-		if (hexnum.length < 6){
-			hexnum = "0" + hexnum;
+function potioneffects(ev){
+	var potioneffects = document.getElementById("potioneffects").getElementsByTagName("input");
+	window.potioneffectlist = "\n"
+	for (i=0;i<potioneffects.length;i++){
+		if (potioneffects[i].value != "" && potioneffects[i] != 0){
+			window.potioneffectlist = window.potioneffectlist + potioneffects[i].previousSibling.previousSibling.innerHTML + "z" + potioneffects[i].value + "z\n";
 		}
 	}
-	ev.target.nextSibling.style.backgroundColor = "#" + hexnum;
-	var thingy = document.getElementById("lorecolor");
-	thingy.value = hexnum;
+	window.potioneffectlist = window.potioneffectlist.substr(0,window.potioneffectlist.length - 2);
+	window.potioneffectlist = window.potioneffectlist.replace(/ /g,"z");
+}
+function switchdivs(ev){
+	var tabs = document.getElementsByClassName("tab");
+	for (i=0;i<tabs.length;i++){
+		if (tabs[i] != ev.target){
+			tabs[i].nextSibling.style.display = "none";
+		}
+		else {
+			tabs[i].nextSibling.style.display = "inline-block";
+		}
+	}
 }
 
 // I could really go for some tasty ham right now...

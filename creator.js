@@ -318,58 +318,40 @@ function createDescription(ev){
 		if (ev.target.getAttribute("data-nameunderline") == "true"){
 			namespan.setAttribute("style",namespan.getAttribute("style") + "text-decoration: underline;");
 		}
-		namespan.setAttribute("style",namespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-namecolor") + ";");		
+		namespan.setAttribute("style",namespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-namecolor") + ";white-space: nowrap;");		
 		namespan.appendChild(contentname);
 		newParagraph.appendChild(namespan);
 	}
-	if (ev.target.getAttribute("data-enchants")){
+	if (ev.target.getAttribute("data-enchants") || ev.target.getAttribute("data-potioneffects") || ev.target.getAttribute("data-lore")){
 		var textbreak = document.createElement("br");
-		textbreak.setAttribute("style","line-height: 150%;");
+		textbreak.setAttribute("style","display:block;line-height:150%;");
 		newParagraph.appendChild(textbreak);
-		var parts = ev.target.getAttribute("data-enchants").split("z");
+	}
+	if (ev.target.getAttribute("data-enchants")){
+		var parts = ev.target.getAttribute("data-enchants").split("|");
 		for (i=0;i < parts.length;i++){
 			var newbreak = document.createElement("br");
 			var newspan = document.createElement("span");
 			var newcontent = document.createTextNode(parts[i]);
 			newspan.appendChild(newcontent);
-			newspan.setAttribute("style","color:#A7A7A5;");
-			var fillerspan = document.createElement("span");
-			var fillercontent = document.createTextNode("z");
-			fillerspan.appendChild(fillercontent);
-			fillerspan.setAttribute("style","color:black;font-size:10px;");
+			newspan.setAttribute("style","color:#A7A7A5;white-space: nowrap;");
 			newParagraph.appendChild(newspan);
-			newParagraph.appendChild(fillerspan);
-			if (!(isNaN(parts[i])) && parts[i] != "Infinity"){
-				newParagraph.appendChild(newbreak);
-			}
+			newParagraph.appendChild(newbreak);
 		}
 	}
 	if (ev.target.getAttribute("data-potioneffects")){
-		var textbreak = document.createElement("br");
-		textbreak.setAttribute("style","line-height: 150%");
-		newParagraph.appendChild(textbreak);
-		var parts = ev.target.getAttribute("data-potioneffects").split("z");
+		var parts = ev.target.getAttribute("data-potioneffects").split("|");
 		for (i=0;i < parts.length;i++){
 			var newbreak = document.createElement("br");
 			var newspan = document.createElement("span");
 			var newcontent = document.createTextNode(parts[i]);
 			newspan.appendChild(newcontent);
-			newspan.setAttribute("style","color: #A7A7A5;");
-			var fillerspan = document.createElement("span");
-			var fillercontent = document.createTextNode("z");
-			fillerspan.appendChild(fillercontent);
-			fillerspan.setAttribute("style","color:black;font-size:10px;");
+			newspan.setAttribute("style","color: #A7A7A5;white-space: nowrap;");
 			newParagraph.appendChild(newspan);
-			newParagraph.appendChild(fillerspan);
-			if (!(isNaN(parts[i]))){
-				newParagraph.appendChild(newbreak);
-			}
+			newParagraph.appendChild(newbreak);
 		}
 	}
 	if (ev.target.getAttribute("data-lore")){
-		var textbreak = document.createElement("br");
-		textbreak.setAttribute("style","line-height: 150%;");
-		newParagraph.appendChild(textbreak);
 		var contentlore = document.createTextNode("\n" + ev.target.getAttribute("data-lore"));
 		var lorespan = document.createElement("span");
 		lorespan.setAttribute("style","");
@@ -383,23 +365,11 @@ function createDescription(ev){
 			lorespan.setAttribute("style",lorespan.getAttribute("style") + "text-decoration: underline;");
 		}
 		lorespan.setAttribute("style",lorespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-lorecolor") + ";");
-		lorespan.setAttribute("style",lorespan.getAttribute("style") + "display:block;position:relative;top:5px;padding-bottom:10px;");
+		lorespan.setAttribute("style",lorespan.getAttribute("style") + "display:block;position:relative;top:5px;padding-bottom:10px;white-space: pre;");
 		lorespan.appendChild(contentlore);
 		newParagraph.appendChild(lorespan);
 	}
 	newParagraph.setAttribute("class","tooltip");
-	if (ev.target.parentNode.className != "itemarea"){
-		var boxlength = ev.target.getAttribute("data-name").length;
-		if (ev.target.getAttribute("data-lore")){
-			var words = ev.target.getAttribute("data-lore").toString().split(" ");
-			for (i=0;i < words.length;i++){
-				if (words[i].length > boxlength){
-					boxlength = words[i].length;
-				}
-			}	
-		}
-	newParagraph.setAttribute("style","min-width:" + boxlength * 13 + "px");
-	}
 	newParagraph.setAttribute("ondrop","drop(event)");
 	newParagraph.setAttribute("ondragover","allowDrop(event)");
 	ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
@@ -572,25 +542,23 @@ function checknum(ev){
 }
 function enchantment(ev){
 	var enchantments = document.getElementById("enchantments").getElementsByTagName("input");
-	window.enchantlist = "\n";
+	window.enchantlist = "";
 	for (i=0;i<enchantments.length;i++){
 		if (enchantments[i].value != "" && enchantments[i].value != 0){
-			window.enchantlist = window.enchantlist + enchantments[i].previousSibling.previousSibling.innerHTML + "z" + enchantments[i].value + "z\n";
+			window.enchantlist = window.enchantlist + enchantments[i].previousSibling.previousSibling.innerHTML + " " + enchantments[i].value + "|";
 		}
 	}
-	window.enchantlist = window.enchantlist.substr(0,window.enchantlist.length - 2);
-	window.enchantlist = window.enchantlist.replace(/ /g,"z");
+	window.enchantlist = window.enchantlist.substr(0,window.enchantlist.length - 1);
 }
 function potioneffects(ev){
 	var potioneffects = document.getElementById("potioneffects").getElementsByTagName("input");
-	window.potioneffectlist = "\n"
+	window.potioneffectlist = ""
 	for (i=0;i<potioneffects.length;i++){
 		if (potioneffects[i].value != "" && potioneffects[i] != 0){
-			window.potioneffectlist = window.potioneffectlist + potioneffects[i].previousSibling.previousSibling.innerHTML + "z" + potioneffects[i].value + "z\n";
+			window.potioneffectlist = window.potioneffectlist + potioneffects[i].previousSibling.previousSibling.innerHTML + " " + potioneffects[i].value + "|";
 		}
 	}
-	window.potioneffectlist = window.potioneffectlist.substr(0,window.potioneffectlist.length - 2);
-	window.potioneffectlist = window.potioneffectlist.replace(/ /g,"z");
+	window.potioneffectlist = window.potioneffectlist.substr(0,window.potioneffectlist.length - 1);
 }
 function switchdivs(ev){
 	var tabs = document.getElementsByClassName("tab");

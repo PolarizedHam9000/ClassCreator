@@ -23,6 +23,7 @@
   border: 2px solid black;
   top:8px;
   left:374px;
+  z-index:0;
 }
 .items{
   display:inline-block;
@@ -41,9 +42,6 @@
 }
 .items:hover{
   opacity:0.6;
-}
-.hotbararea:hover{
-	z-index:10;
 }
 .numbers{
   display:inline;
@@ -95,8 +93,7 @@
   font-family: Minecraft;
   padding: 5px;
   z-index: 10;
-  margin-left:-10px;
-  margin-top:0px;
+  margin-top:10px;
   box-sizing: border-box;
 }
 .formatting{

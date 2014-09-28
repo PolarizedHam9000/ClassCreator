@@ -318,14 +318,17 @@ function createDescription(ev){
 		if (ev.target.getAttribute("data-nameunderline") == "true"){
 			namespan.setAttribute("style",namespan.getAttribute("style") + "text-decoration: underline;");
 		}
-		namespan.setAttribute("style",namespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-namecolor") + ";white-space: nowrap;");		
+		namespan.setAttribute("style",namespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-namecolor") + ";white-space:nowrap;");		
 		namespan.appendChild(contentname);
 		newParagraph.appendChild(namespan);
 	}
 	if (ev.target.getAttribute("data-enchants") || ev.target.getAttribute("data-potioneffects") || ev.target.getAttribute("data-lore")){
 		var textbreak = document.createElement("br");
-		textbreak.setAttribute("style","display:block;line-height:150%;");
+		textbreak.setAttribute("style","display:block;line-height:50%;");
 		newParagraph.appendChild(textbreak);
+		var fillerspan = document.createElement("span");
+		fillerspan.setAttribute("style","display:block;height:7px;");
+		newParagraph.appendChild(fillerspan);
 	}
 	if (ev.target.getAttribute("data-enchants")){
 		var parts = ev.target.getAttribute("data-enchants").split("|");
@@ -334,7 +337,7 @@ function createDescription(ev){
 			var newspan = document.createElement("span");
 			var newcontent = document.createTextNode(parts[i]);
 			newspan.appendChild(newcontent);
-			newspan.setAttribute("style","color:#A7A7A5;white-space: nowrap;");
+			newspan.setAttribute("style","color:#A7A7A5;white-space:nowrap;");
 			newParagraph.appendChild(newspan);
 			newParagraph.appendChild(newbreak);
 		}
@@ -365,7 +368,7 @@ function createDescription(ev){
 			lorespan.setAttribute("style",lorespan.getAttribute("style") + "text-decoration: underline;");
 		}
 		lorespan.setAttribute("style",lorespan.getAttribute("style") + "color:" + ev.target.getAttribute("data-lorecolor") + ";");
-		lorespan.setAttribute("style",lorespan.getAttribute("style") + "display:block;position:relative;top:5px;padding-bottom:10px;white-space: pre;");
+		lorespan.setAttribute("style",lorespan.getAttribute("style") + "display:block;position:relative;top:-10px;white-space: pre;");
 		lorespan.appendChild(contentlore);
 		newParagraph.appendChild(lorespan);
 	}
@@ -373,6 +376,12 @@ function createDescription(ev){
 	newParagraph.setAttribute("ondrop","drop(event)");
 	newParagraph.setAttribute("ondragover","allowDrop(event)");
 	ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
+	var invslots = document.getElementsByClassName("hotbararea");
+	for (i=0;i < invslots.length;i++){
+		invslots[i].style.zIndex = "1";
+	}
+	ev.target.parentNode.style.zIndex = "10";
+	document.getElementById("itemarea").style.zIndex = "0";
 }
 function removeDescription(ev){
 	if (ev.target.nextSibling && ev.target.nextSibling.tagName == "P"){
@@ -571,5 +580,4 @@ function switchdivs(ev){
 		}
 	}
 }
-
 // I could really go for some tasty ham right now...

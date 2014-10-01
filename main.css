@@ -11,7 +11,7 @@
   width:32px;
   position:relative;
   margin-left:0.25px;
-  left:15px;
+  left:16px;
   top:165px;
   z-index:1;
 }
@@ -19,11 +19,10 @@
   display:inline-block;
   width:1000px;
   position:absolute;
-  background-color:#00CC99;
+  background-color:tan;
   border: 2px solid black;
   top:8px;
   left:374px;
-  z-index:0;
 }
 .items{
   display:inline-block;
@@ -95,6 +94,7 @@
   z-index: 10;
   margin-top:10px;
   box-sizing: border-box;
+  margin-left:0px;
 }
 .formatting{
 	display:inline;
@@ -105,4 +105,12 @@
 }
 .formatting:hover{
 	background-color:gray;
+}
+.hotbararea > [id^="LEATHER "] {
+	display:inline-block;
+	position:absolute;
+	clip: rect(3px,30px,30px,2px);
+}
+.hotbararea >[id^="LEATHER "] + .tooltip {
+	left:30px;
 }

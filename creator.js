@@ -11,7 +11,7 @@ function iteminfo(){
   var chestplates = ["LEATHER TUNIC","CHAIN CHESTPLATE","IRON CHESTPLATE","DIAMOND CHESTPLATE","GOLDEN CHESTPLATE"];
   var leggings = ["LEATHER PANTS","CHAIN LEGGINGS","IRON LEGGINGS","DIAMOND LEGGINGS","GOLDEN LEGGINGS"];
   var boots = ["LEATHER BOOTS","CHAIN BOOTS","IRON BOOTS","DIAMOND BOOTS","GOLDEN BOOTS"];
-  var armorimages = ["http://i.imgur.com/M4UTa0x.png","http://i.imgur.com/F0MGF5h.png","http://i.imgur.com/QcsOvla.png","http://i.imgur.com/aVtKERb.png","http://i.imgur.com/WyWVsbu.png","http://i.imgur.com/2zkO3Qi.png","http://i.imgur.com/aEJAvx6.png","http://i.imgur.com/5Z2Hix8.png","http://i.imgur.com/Z78JHQD.png","http://i.imgur.com/O0SG8vx.png","http://i.imgur.com/UlRFhpd.png","http://i.imgur.com/qpx7p7R.png","http://i.imgur.com/gb6qk1F.png","http://i.imgur.com/IvhCQE0.png","http://i.imgur.com/Up45HKW.png","http://i.imgur.com/5siWMCq.png","http://i.imgur.com/oDQ1TdR.png","http://i.imgur.com/CmE0kyV.png","http://i.imgur.com/CIUphY3.png","http://i.imgur.com/v0jzULy.png"];
+  var armorimages = ["http://i.imgur.com/M4UTa0x.png","http://i.imgur.com/F0MGF5h.png","http://i.imgur.com/QcsOvla.png","http://i.imgur.com/aVtKERb.png","http://i.imgur.com/WyWVsbu.png","http://i.imgur.com/2zkO3Qi.png","http://i.imgur.com/aEJAvx6.png","http://i.imgur.com/5Z2Hix8.png","http://i.imgur.com/Z78JHQD.png","http://i.imgur.com/O0SG8vx.png","http://i.imgur.com/AMlbU5C.png","http://i.imgur.com/qpx7p7R.png","http://i.imgur.com/gb6qk1F.png","http://i.imgur.com/IvhCQE0.png","http://i.imgur.com/Up45HKW.png","http://i.imgur.com/5siWMCq.png","http://i.imgur.com/oDQ1TdR.png","http://i.imgur.com/CmE0kyV.png","http://i.imgur.com/CIUphY3.png","http://i.imgur.com/v0jzULy.png"];
   for(i=0;i < itemlist.length;i++){
     var item = document.createElement("img");
     if (itemlist[i].match("2/21/Grid_Fire")){
@@ -48,7 +48,13 @@ function iteminfo(){
     newhelmet.setAttribute("style","position:absolute;z-index:3;top:36px;left:95px;opacity:0.0");
     newhelmet.setAttribute("id",helmets[i]);
     newhelmet.setAttribute("draggable","false");
-    newhelmet.setAttribute("src",armorimages[i]);
+	if (newhelmet.id.match("LEATHER")){
+		newhelmet.setAttribute("src","http://i.imgur.com/6ql7hZL.png");
+		newhelmet.style.backgroundImage = "url('" + armorimages[i] + "')"
+	}
+	else {
+		newhelmet.setAttribute("src",armorimages[i]);
+	}
 	newhelmet.setAttribute("class","armor");
     var node = document.getElementById("test")
     node.insertBefore(newhelmet,node.childNodes[4]);
@@ -56,10 +62,16 @@ function iteminfo(){
   for (i=0;i < chestplates.length;i++){
     document.getElementById(chestplates[i]).setAttribute("data-armor-type","chestplate");
     var newchestplate = document.createElement("img");
-    newchestplate.setAttribute("style","position:absolute;z-index:3;top:65px;left:82px;opacity:0.0");
+    newchestplate.setAttribute("style","position:absolute;z-index:3;top:65px;left:82px;opacity:0.0;");
     newchestplate.setAttribute("id",chestplates[i]);
     newchestplate.setAttribute("draggable","false");
-    newchestplate.setAttribute("src",armorimages[i+5]);
+	if (newchestplate.id.match("LEATHER")){
+		newchestplate.setAttribute("src","http://i.imgur.com/uMukx2Y.png");
+		newchestplate.style.backgroundImage = "url('" + armorimages[i+5] + "')"
+	}
+	else {
+		newchestplate.setAttribute("src",armorimages[i+5]);
+	}	
 	newchestplate.setAttribute("class","armor");
     var node = document.getElementById("test")
     node.insertBefore(newchestplate ,node.childNodes[4]);
@@ -70,7 +82,13 @@ function iteminfo(){
     newleggings.setAttribute("style","position:absolute;z-index:2;top:100px;left:98px;opacity:0.0");
     newleggings.setAttribute("id",leggings[i]);
     newleggings.setAttribute("draggable","false");
-    newleggings.setAttribute("src",armorimages[i+10]);
+	if (newleggings.id.match("LEATHER")){
+		newleggings.setAttribute("src","http://i.imgur.com/p7ZsGp5.png");
+		newleggings.style.backgroundImage = "url('" + armorimages[i+10] + "')"
+	}
+	else {
+		newleggings.setAttribute("src",armorimages[i+10]);
+	}
 	newleggings.setAttribute("class","armor");
     var node = document.getElementById("test")
     node.insertBefore(newleggings,node.childNodes[4]);
@@ -78,10 +96,16 @@ function iteminfo(){
   for(i=0;i < boots.length;i++){
     document.getElementById(boots[i]).setAttribute("data-armor-type","boots");
     var newboots = document.createElement("img");
-    newboots.setAttribute("style","position:absolute;z-index:3;top:135px;left:97px;opacity:0.0");
+    newboots.setAttribute("style","position:absolute;z-index:3;top:138px;left:97px;opacity:0.0");
     newboots.setAttribute("id",boots[i]);
     newboots.setAttribute("draggable","false");
-    newboots.setAttribute("src",armorimages[i+15]);
+	if (newboots.id.match("LEATHER")){
+		newboots.setAttribute("src","http://i.imgur.com/SHIY3TG.png");
+		newboots.style.backgroundImage = "url('" + armorimages[i+15] + "')"
+	}
+	else {
+		newboots.setAttribute("src",armorimages[i+15]);
+	}
 	newboots.setAttribute("class","armor");
     var node = document.getElementById("test")
     node.insertBefore(newboots,node.childNodes[4]);
@@ -150,6 +174,11 @@ function drop(ev){
   if (ev.target.className == "hotbararea" || ev.target.className == "hotbararea armorslot"){
     if (window.movingItem.parentNode.id == "itemarea"){
 		window.movingItem = window.movingItem.cloneNode(false);
+		if (window.armorcolor){
+			var red = parseInt(window.armorcolor.substring(0,2),16);
+			var green = parseInt(window.armorcolor.substring(2,4),16);
+			var blue = parseInt(window.armorcolor.substring(4,6),16);		
+		}
 		if (window.renamed){
 			window.movingItem.setAttribute("data-name",window.renamed);
 		}
@@ -170,20 +199,45 @@ function drop(ev){
 		if (window.potioneffectlist && window.movingItem.id.match("POTION")){
 			window.movingItem.setAttribute("data-potioneffects",window.potioneffectlist);
 		}
-      var amount = window.amounttoadd;
-      if (window.movingItem.getAttribute("data-stackable") == "false"){
-        amount = 1;
-      }
-    }
-    else {
-      amount = window.movingItemAmount.innerHTML;
-      window.movingItemAmount.innerHTML = "";
-    }
+		var amount = window.amounttoadd;
+		if (window.movingItem.getAttribute("data-stackable") == "false"){
+			amount = 1;
+		}
+		if (window.movingItem.id == "LEATHER BOOTS"){
+			window.movingItem.style.backgroundImage = "url('" + window.movingItem.src + "')";
+			window.movingItem.src = "http://i.imgur.com/E987k06.png";	
+			window.movingItem.style.boxShadow = "inset 0 0 0 1000px rgba(" + red + "," + green + "," + blue + ",0.7)";
+			window.movingItem.setAttribute("data-color",window.armorcolor);
+		}
+		else if (window.movingItem.id == "LEATHER PANTS"){
+			window.movingItem.style.backgroundImage = "url('" + window.movingItem.src + "')";
+			window.movingItem.src = "http://i.imgur.com/fOWNZ7B.png?5999";
+			window.movingItem.style.boxShadow = "inset 0 0 0 1000px rgba(" + red + "," + green + "," + blue + ",0.7)";
+			window.movingItem.setAttribute("data-color",window.armorcolor);
+		}
+		else if (window.movingItem.id == "LEATHER TUNIC"){
+			window.movingItem.style.backgroundImage = "url('" + window.movingItem.src + "')";
+			window.movingItem.src = "http://i.imgur.com/pBb06a3.png";
+			window.movingItem.style.boxShadow = "inset 0 0 0 1000px rgba(" + red + "," + green + "," + blue + ",0.7)";
+			window.movingItem.setAttribute("data-color",window.armorcolor);
+		}
+		else if (window.movingItem.id == "LEATHER CAP"){
+			window.movingItem.style.backgroundImage = "url('" + window.movingItem.src + "')";
+			window.movingItem.src = "http://i.imgur.com/mLYMgb0.png";
+			window.movingItem.style.boxShadow = "inset 0 0 0 1000px rgba(" + red + "," + green + "," + blue + ",0.7)";
+			window.movingItem.setAttribute("data-color",window.armorcolor);
+		}
+	}
+	else {
+		amount = window.movingItemAmount.innerHTML;
+		window.movingItemAmount.innerHTML = "";
+	}
     if (window.movingItemclone.parentNode.className == "hotbararea armorslot" && window.hasbeendonealready == "false"){
       document.getElementById(window.movingItem.id).style.opacity = "0.0";
     }
     else if (ev.target.className == "hotbararea armorslot"){
       document.getElementById(window.movingItemclone.id).style.opacity = "1.0";
+	  document.getElementById(window.movingItemclone.id).style.boxShadow = "inset 0 0 0 1000px rgba(" + red + "," + green + "," + blue + ",0.2)";
 	  window.hasbeendonealready = "true";
     }
     ev.target.appendChild(window.movingItem);
@@ -196,7 +250,7 @@ function drop(ev){
     else {
       ev.target.firstChild.style.opacity = "1.0";
     }
-    window.movingItem.removeAttribute("style");
+    window.movingItem.style.opacity = "";
   }
   else if (ev.target.className == "items"){
     if (ev.target.parentNode.className == "hotbararea"){
@@ -226,7 +280,8 @@ function drop(ev){
   else if (ev.target.id == "body"){
     deleteprevious();
   }
-  setTimeout(function testing(){if (window.movingItem.nextSibling && window.movingItem.nextSibling.className == "tooltip"){window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);}},500);
+  setTimeout(function testing(){if (window.movingItem.nextSibling && window.movingItem.nextSibling.className == "tooltip"){window.movingItem.parentNode.removeChild(window.movingItem.nextSibling);}},200);
+	deletetooltips();
 }
 function newamount(ev){
 	if ((isNaN(String.fromCharCode(ev.which)) && ev.which != 8) || ev.shiftKey){
@@ -322,7 +377,7 @@ function createDescription(ev){
 		namespan.appendChild(contentname);
 		newParagraph.appendChild(namespan);
 	}
-	if (ev.target.getAttribute("data-enchants") || ev.target.getAttribute("data-potioneffects") || ev.target.getAttribute("data-lore")){
+	if (ev.target.getAttribute("data-enchants") || ev.target.getAttribute("data-potioneffects") || ev.target.getAttribute("data-lore") || ev.target.getAttribute("data-color")){
 		var textbreak = document.createElement("br");
 		textbreak.setAttribute("style","display:block;line-height:50%;");
 		newParagraph.appendChild(textbreak);
@@ -354,6 +409,13 @@ function createDescription(ev){
 			newParagraph.appendChild(newbreak);
 		}
 	}
+	if (ev.target.getAttribute("data-color")){
+		var colorspan = document.createElement("span");
+		var colorcontent = document.createTextNode("Color: #" + ev.target.getAttribute("data-color"));
+		colorspan.appendChild(colorcontent);
+		colorspan.setAttribute("style","color: #A7A7A5;white-space:nowrap;");
+		newParagraph.appendChild(colorspan);
+	}
 	if (ev.target.getAttribute("data-lore")){
 		var contentlore = document.createTextNode("\n" + ev.target.getAttribute("data-lore"));
 		var lorespan = document.createElement("span");
@@ -375,13 +437,15 @@ function createDescription(ev){
 	newParagraph.setAttribute("class","tooltip");
 	newParagraph.setAttribute("ondrop","drop(event)");
 	newParagraph.setAttribute("ondragover","allowDrop(event)");
-	ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
-	var invslots = document.getElementsByClassName("hotbararea");
-	for (i=0;i < invslots.length;i++){
-		invslots[i].style.zIndex = "1";
+	if (ev.target.parentNode.id != "itemarea"){
+		var invslots = document.getElementsByClassName("hotbararea");
+		for (i=0;i < invslots.length;i++){
+			invslots[i].style.zIndex = "1";
+		}
+		ev.target.parentNode.style.zIndex = "10";
 	}
-	ev.target.parentNode.style.zIndex = "10";
-	document.getElementById("itemarea").style.zIndex = "0";
+	deletetooltips(ev.target);
+	ev.target.parentNode.insertBefore(newParagraph,ev.target.nextSibling);
 }
 function removeDescription(ev){
 	if (ev.target.nextSibling && ev.target.nextSibling.tagName == "P"){
@@ -577,6 +641,19 @@ function switchdivs(ev){
 		}
 		else {
 			tabs[i].nextSibling.style.display = "inline-block";
+		}
+	}
+}
+function dyeArmor(ev){
+	if (ev.target.value.length == 6){
+		window.armorcolor = ev.target.value;
+	}
+}
+function deletetooltips(target){
+	var tooltips = document.getElementsByClassName("tooltip");
+	for (i=0;i < tooltips.length;i++){
+		if (tooltips[i] != target.nextSibling){
+			tooltips[i].parentNode.removeChild(tooltips[i]);
 		}
 	}
 }
